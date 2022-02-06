@@ -28,6 +28,13 @@ const commentError = [
   'We look forward to your editing of the title!'
 ].join('\n')
 
+const commentErrorAgain = [
+  'Hi @{user}，Thanks for your editing of the title.',
+  'However, there are still problems with the title format.',
+  'Please make sure the title is in the [following format]({url}), and try again.',
+  'We look forward to your editing of the title!'
+].join('\n')
+
 module.exports = on => {
   if (actions.length) {
     on('pull_request_opened', ({payload, repo}) => {
@@ -45,7 +52,16 @@ module.exports = on => {
     })
 
     on('pull_request_edited', async ({payload, repo}) => {
-      if (match(payload.pull_request.title) && await pullRequestHasLabel(payload, 'invalid')) {
+      if (!match(payload.pull_request.title)) {
+        commentPullRequest(
+          payload,
+          format(commentErrorAgain, {
+            user: payload.pull_request.user.login,
+            url: `https://github.com/${payload.repository.full_name}/blob/master/.github/contributing.md#pull-request-guidelines`
+          }))
+        return
+      }
+      if (await pullRequestHasLabel(payload, 'invalid')) {
         commentPullRequest(
           payload,
           format(commentSuccess, {
