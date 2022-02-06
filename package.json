@@ -56,7 +56,8 @@
       "labelToAuthor": {
         "bug": "Littleor",
         "feature": "Littleor",
-        "custom": "Littleor"
+        "custom": "Littleor",
+        "doc": "Littleor"
       }
     }
   },

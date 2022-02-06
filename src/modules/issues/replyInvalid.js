@@ -11,10 +11,10 @@ const {
 } = require('../../github')
 
 const comment = [
-  'hi @{user}，Thank you very much for your feedback.',
+  'Hi @{user},Thank you very much for your feedback.',
   'But because you didn\'t use the [issue template](./new/choose) to submit, it will be closed directly.',
-  'Please use the [issue template](./new/choose) to submit your issue, thank you!'
-].join('')
+  'Thank you!'
+].join('\n')
 
 function replyInvalid (on) {
   on('issues_opened', ({payload}) => {

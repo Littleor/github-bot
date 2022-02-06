@@ -4,7 +4,7 @@
  */
 
 const format = require('string-template')
-const { getPkgCommitPrefix } = require('../../utils')
+const {getPkgCommitPrefix} = require('../../utils')
 const {
   commentPullRequest,
   addLabelsToPullRequest,
@@ -18,23 +18,25 @@ const match = title => {
 }
 
 const commentSuccess = [
-  'hi @{user}，非常感谢您及时修正标题格式，祝您玩的开心！'
+  'Hi @{user}, Thank you very much for correcting the title format in time.'
 ].join('')
 
 const commentError = [
-  'hi @{user}，非常感谢您的 PR ，',
-  '但是您没有使用 [PR 标题规则](https://github.com/xuexb/github-bot#commit-log-和-pr-标题规则) 格式，',
-  '请及时修改， 谢谢！'
-].join('')
+  'Hi @{user}，Thanks for your PR.',
+  'But there is something wrong with the title format.',
+  'Please make sure the title is in the [following format](@{url}).',
+  'We look forward to your editing of the title!'
+].join('\n')
 
 module.exports = on => {
   if (actions.length) {
-    on('pull_request_opened', ({ payload, repo }) => {
+    on('pull_request_opened', ({payload, repo}) => {
       if (!match(payload.pull_request.title)) {
         commentPullRequest(
           payload,
           format(commentError, {
-            user: payload.pull_request.user.login
+            user: payload.pull_request.user.login,
+            url: `https://github.com/${payload.repository.full_name}/blob/master/.github/contributing.md#pull-request-guidelines`
           })
         )
 
@@ -42,7 +44,7 @@ module.exports = on => {
       }
     })
 
-    on('pull_request_edited', async ({ payload, repo }) => {
+    on('pull_request_edited', async ({payload, repo}) => {
       if (match(payload.pull_request.title) && await pullRequestHasLabel(payload, 'invalid')) {
         commentPullRequest(
           payload,

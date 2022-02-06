@@ -13,12 +13,12 @@ const getAction = title => {
 }
 
 const ACTION_TO_LABEL_MAP = {
-  feat: 'enhancement',
+  feat: 'feature',
   fix: 'bug',
-  docs: 'document'
+  docs: 'docs'
 }
 
-const handle = async ({ payload, repo }) => {
+const handle = async ({payload, repo}) => {
   const action = getAction(payload.pull_request.title)
   if (action && ACTION_TO_LABEL_MAP[action]) {
     const exist = await pullRequestHasLabel(payload, ACTION_TO_LABEL_MAP[action])
