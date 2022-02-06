@@ -11,16 +11,16 @@ const {
 } = require('../../github')
 
 const comment = [
-  'hi @{user}，非常感谢您的反馈，',
-  '但是由于您没有使用 [创建 issue](https://xuexb.github.io/github-bot/create-issue.html) 页面提交， 将直接被关闭， 谢谢！'
+  'hi @{user}，Thank you very much for your feedback.',
+  'But because you didn\'t use the [issue template](./new/choose) to submit, it will be closed directly.',
+  'Please use the [issue template](./new/choose) to submit your issue, thank you!'
 ].join('')
 
 function replyInvalid (on) {
-  on('issues_opened', ({ payload }) => {
+  on('issues_opened', ({payload}) => {
     const issue = payload.issue
     const opener = issue.user.login
-
-    if (issue.body.indexOf('<!-- by create-issue -->') === -1) {
+    if ((issue.body.match(/<!--\s*label:\s*(.+?)\s*-->/) || []).length === 0) {
       commentIssue(
         payload,
         format(comment, {
