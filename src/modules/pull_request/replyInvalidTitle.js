@@ -24,7 +24,7 @@ const commentSuccess = [
 const commentError = [
   'Hi @{user}，Thanks for your PR.',
   'But there is something wrong with the title format.',
-  'Please make sure the title is in the [following format](@{url}).',
+  'Please make sure the title is in the [following format]({url}).',
   'We look forward to your editing of the title!'
 ].join('\n')
 
