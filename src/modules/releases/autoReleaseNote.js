@@ -18,7 +18,7 @@ const RELEASE_CHANGE_MAP = {
 }
 
 module.exports = on => {
-  on('create_tag', async ({ payload, repo }) => {
+  on('create_tag', async ({payload, repo}) => {
     const tag = await getReleaseByTag(payload, {
       tag_name: payload.ref
     })
@@ -88,7 +88,8 @@ module.exports = on => {
       createRelease(payload, {
         tag_name: payload.ref,
         name: `${payload.ref} @${payload.repository.owner.login}`,
-        body: body.join('\n')
+        body: body.join('\n'),
+        prerelease: (payload.ref.indexOf('beta') !== -1)
       })
     }
   })
